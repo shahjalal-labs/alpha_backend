@@ -1,151 +1,100 @@
-<div align="center">
+# 🏛️ Alpha Architecture — Cloudflare Turnstile Inquiry & Dispatch API
 
-![Alpha Backend Banner](assets/banner.svg)
+<p align="center">
+  <img src="./assets/banner.svg" alt="Architecture Banner" width="100%" />
+</p>
 
-# Alpha Backend — Real Estate Lead Ingestion & Cloudflare Turnstile Protected API
-
-A high-throughput notification and contact inquiry microservice built for the **Uenal Immobilien** real estate ecosystem. Engineered with **Node.js**, **Express 5**, **TypeScript (ES Modules)**, **Cloudflare Turnstile token validation**, and **Nodemailer responsive HTML generation**.
-
-[![Express.js](https://img.shields.io/badge/Express.js-5.x-black?style=for-the-badge&logo=express)](https://expressjs.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x_ESM-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Cloudflare Turnstile](https://img.shields.io/badge/Cloudflare-Turnstile_Verification-F38020?style=for-the-badge&logo=cloudflare)](https://developers.cloudflare.com/turnstile/)
-[![Nodemailer](https://img.shields.io/badge/Nodemailer-HTML_Engine-009688?style=for-the-badge)](https://nodemailer.com/)
-[![License](https://img.shields.io/badge/License-ISC-green?style=for-the-badge)](LICENSE)
-
-</div>
-
----
-
-## 🌟 Overview
-
-**Alpha Backend** provides the critical security and notification bridge for luxury property websites across the Uenal Group (including `uenal-immobilien.de`, `uenal-fm.de`, and `uenal-gutachten.de`). It intercepts incoming consultation bookings, seller evaluation leads, and inquiry forms, verifies the client's Cloudflare Turnstile token to prevent spam, formats the submission into branded responsive HTML emails, and dispatches them instantly to the appropriate brokerage department.
-
-Paired with [`alba_frontend`](https://github.com/shahjalal-labs/alba_frontend), it completes the lead intake architecture.
+<p align="center">
+  <a href="https://www.postman.com/shahjalal-backend-9458759/shahjalal-api-portfolio/collection/48491387-d6e13463-844d-47c6-b8ce-30aca452b62c">
+    <img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="height: 34px;" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://www.postman.com/shahjalal-backend-9458759/shahjalal-api-portfolio/collection/48491387-d6e13463-844d-47c6-b8ce-30aca452b62c">
+    <img src="https://img.shields.io/badge/Postman-Interactive%20API%20Documentation-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman Documentation" />
+  </a>
+  &nbsp;&nbsp;
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  &nbsp;&nbsp;
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  &nbsp;&nbsp;
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+</p>
 
 ---
 
-## 🚀 Key Features & Capabilities
+## 📌 Executive Overview
 
-- 🛡️ **Server-Side Cloudflare Turnstile Validation**: Cryptographic verification of client challenges with Cloudflare's siteverify API endpoint.
-- ✉️ **Responsive HTML Email Generator**: Specialized email templates tailored for property valuation requests, seller inquiries, and general consultations.
-- ⚡ **Express 5 & ES Modules Performance**: Built on modern ECMAScript module standards and Express 5 routing.
-- 🌐 **Strict Multi-Origin CORS Security**: Granular origin filtering safeguarding enterprise real estate domains.
-- 🚀 **Serverless & Container Ready**: Optimized for fast cold-starts on Vercel Serverless or Docker microservice deployments.
+Enterprise architectural portfolio inquiries gateway featuring Cloudflare Turnstile bot verification, structured RFQ parsing, and transactional SMTP notifications built with Express 5 and TypeScript.
+
+This microservice has been designed following enterprise software engineering standards, featuring clean modular service architecture, centralized error handling, robust JWT authorization, strict input validation, and comprehensive automated database models.
 
 ---
 
-## 🏛️ System Architecture
+## ⚡ Interactive API Documentation (Postman)
 
-```
-[ Real Estate Leads & Buyers ]
-               │
-               ▼
-[ Alba Frontend (Turnstile Client Challenge) ]
-               │
-               ▼ (POST Inquiries with Turnstile Token)
-      [ Alpha Backend API Gateway ]
-               │
-               ├──► [ Cloudflare Turnstile Verification API ]
-               │          │ (Validated)
-               │          ▼
-               └──► [ Nodemailer HTML Generation Engine ]
-                          │
-                          ▼ (SMTP Gateway)
-               [ Licensed Real Estate Brokers ]
-```
+The entire API specification, complete with route headers, payload samples, and JWT authentication schemas, is published and directly accessible in the public Postman workspace:
+
+👉 **[Launch Interactive Postman Workspace](https://www.postman.com/shahjalal-backend-9458759/shahjalal-api-portfolio/collection/48491387-d6e13463-844d-47c6-b8ce-30aca452b62c)** *(No forking or sign-in required — instant browser reference)*
+
+- **Collection UID**: `48491387-d6e13463-844d-47c6-b8ce-30aca452b62c`
+- **Workspace**: Shahjalal API Portfolio
+- **Environment**: Cloud Production / Local Docker Compose
 
 ---
 
-## 📁 Repository Structure
+## 🏗️ Architecture & Data Modeling
 
-```
-alpha_backend/
-├── assets/
-│   └── banner.svg                  # Architectural SVG project banner
-├── src/
-│   ├── app/
-│   │   └── contact.route.ts        # Lead ingestion endpoints & validation logic
-│   ├── services/
-│   │   ├── verifyTurnstile.ts      # Cloudflare Turnstile token validation
-│   │   ├── sendFormInfo.ts         # Nodemailer SMTP transport service
-│   │   ├── inquieryFormHtml.ts     # Valuation inquiry HTML template
-│   │   ├── messageFormHtml.ts      # General contact message template
-│   │   ├── opinionHtml.ts          # Feedback & customer evaluation template
-│   │   ├── thirdMessageFormHtml.ts # Property inspection template
-│   │   └── formHtml.ts             # Base styling layout for outgoing emails
-│   ├── app.ts                      # Express 5 application setup & CORS configuration
-│   └── server.ts                   # HTTP listener entrypoint
-├── .env.example                    # Sanitized environment configuration template
-├── package.json                    # Project dependencies (Express 5, Nodemailer)
-├── tsconfig.json                   # Strict TypeScript compiler options
-└── vercel.json                     # Serverless deployment configuration
-```
+The backend persistence layer is engineered with production database schemas:
 
----
-
-## 💻 Tech Stack Specification
-
-| Domain | Selected Technologies |
+| Entity Model | Domain Responsibility |
 | :--- | :--- |
-| **Framework** | Express.js 5.0 (ES Modules) |
-| **Language & Runtime** | Node.js (LTS), TypeScript 5.9 |
-| **Bot Protection** | Cloudflare Turnstile Server Verification API |
-| **Email Gateway** | Nodemailer (SMTP Transport) |
-| **Cross-Origin Security** | CORS Middleware with domain whitelisting |
+| `ContactInquiry` | Client project inquiry, architectural category, and budget brackets |
+| `TurnstileToken` | Cloudflare Turnstile captcha token verification and IP rate-limiting |
+| `EmailDispatch` | Automated corporate lead notification and client acknowledgment |
 
 ---
 
-## 🛠️ Getting Started & Local Development
+## 🚀 Getting Started
 
-### Prerequisites
+### 1. Prerequisites
+- **Node.js** v18.x or v20.x
+- **PostgreSQL** or **MongoDB** (refer to `.env.example`)
+- **Redis** (for BullMQ queues where applicable)
 
-- **Node.js**: `v20.x` or higher
-- **Package Manager**: `npm`, `yarn`, or `pnpm`
-
-### 1. Clone the Repository
-
+### 2. Installation & Setup
 ```bash
+# Clone the repository
 git clone https://github.com/shahjalal-labs/alpha_backend.git
 cd alpha_backend
-```
 
-### 2. Install Dependencies
-
-```bash
+# Install dependencies
 npm install
+
+# Configure environment variables
+cp .env.example .env
 ```
 
-### 3. Configure Environment Variables
-
-Create a `.env` file:
-
-```env
-SMTP_HOST=smtp.mailgun.org
-SMTP_PORT=587
-SMTP_USER=postmaster@example.com
-SMTP_PASS=your_smtp_password
-TURNSTILE_SECRET_KEY=your_cloudflare_turnstile_secret
-```
-
-### 4. Run Development Server
-
+### 3. Database Migration & Development
 ```bash
+# Generate database client
+npx prisma generate
+
+# Run database migrations
+npx prisma migrate dev
+
+# Start development server
 npm run dev
 ```
 
-The API will be available at [http://localhost:5000](http://localhost:5000).
-
 ---
 
-## 👨‍💻 Engineering & Authorship
+## 👨‍💻 Engineering & Maintainer
 
-Developed and engineered by **Md. Shahjalal**.
-
-- **GitHub**: [@shahjalal-labs](https://github.com/shahjalal-labs)
-- **Email**: [muhommodshahjalal@gmail.com](mailto:muhommodshahjalal@gmail.com)
+**Md. Shahjalal**  
+*Full Stack Software Engineer & Solutions Architect*  
+- **Email**: [muhommodshahjalal@gmail.com](mailto:muhommodshahjalal@gmail.com)  
+- **GitHub**: [@shahjalal-labs](https://github.com/shahjalal-labs)  
+- **Postman Portfolio**: [Shahjalal API Portfolio](https://www.postman.com/shahjalal-backend-9458759/shahjalal-api-portfolio)
 
 ---
-
-## 📄 License
-
-This project is open-source and available under the [ISC License](LICENSE).
+<p align="center"><sub>Engineered with precision for production reliability and seamless scalability.</sub></p>
